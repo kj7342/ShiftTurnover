@@ -62,3 +62,27 @@ li button{color:#dc5555;padding:6px 10px;font-size:11px}
 hr{border:0;border-top:1px solid var(--line);margin:24px 0}
 @media(max-width:650px){.wrap{padding:0 16px}header{height:72px}.brand{gap:10px}.brand b{width:39px;height:39px;border-radius:12px}.brand strong{font-size:13px}.brand small{font-size:10px}.actions{gap:7px}.actions button{width:39px;height:39px}.intro{display:block;margin-bottom:22px}.intro span{display:inline-block;margin-top:13px}.panel{padding:22px 17px;border-radius:16px}.grid{grid-template-columns:1fr;gap:0}.history{margin-top:36px}.historyhead{display:block}.historyhead input{max-width:none;margin-top:14px}.demo{display:none}.item{padding:17px}.itemtop{display:block}.itemtop span{display:block;margin-top:5px}.submitrow{align-items:stretch;flex-direction:column-reverse}.submitrow button{width:100%;min-height:48px}.drawer{padding:24px 20px}main{padding-top:32px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Production history table */
+.historytools{display:flex;align-items:end;gap:12px;min-width:min(100%,520px)}
+.historytools>input{flex:1;min-width:190px;max-width:310px;margin:0}
+.sortlabel{margin:0;min-width:165px;font-size:11px;color:var(--muted)}
+.sortlabel select{margin-top:5px;min-height:43px;padding:9px 34px 9px 11px;font-size:12px}
+.table-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:0 6px 22px rgba(22,34,53,.035)}
+.history-table{width:100%;border-collapse:separate;border-spacing:0;text-align:left;font-size:12px;min-width:790px}
+.history-table th{background:var(--surface);color:var(--muted);font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;padding:14px 15px;border-bottom:1px solid var(--line);white-space:nowrap}
+.history-table th:first-child{border-radius:14px 0 0 0}
+.history-table th:last-child{border-radius:0 14px 0 0}
+.history-table td{padding:15px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--text)}
+.history-table tbody tr:last-child td{border-bottom:0}
+.history-table tbody tr:hover{background:color-mix(in srgb,var(--soft) 48%,var(--card))}
+.date-cell{white-space:nowrap}.date-cell strong,.date-cell small{display:block}.date-cell strong{font-size:12px}.date-cell small{color:var(--muted);font-size:10px;margin-top:3px}
+.operator-name{font-weight:750;white-space:nowrap}
+.order-cell{font-variant-numeric:tabular-nums;font-weight:650;white-space:nowrap}
+.qty-cell{font-variant-numeric:tabular-nums;font-weight:750;text-align:right}
+.history-table th:nth-child(4){text-align:right}
+.comment-cell{min-width:260px;max-width:440px;white-space:pre-wrap;line-height:1.55}
+.empty-state{padding:34px 20px;text-align:center;color:var(--muted)}
+.empty-state strong{color:var(--text)}
+.empty-state p{font-size:12px}
+@media(max-width:720px){.historyhead{display:block}.historytools{display:grid;grid-template-columns:1fr;min-width:0;margin-top:14px;gap:8px}.historytools>input{max-width:none;width:100%}.sortlabel{width:100%}.sortlabel select{width:100%}.table-wrap{border-radius:12px}.history-table{min-width:760px}}
