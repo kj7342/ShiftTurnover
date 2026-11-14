@@ -11,7 +11,7 @@
 <section class="intro"><div><small>PRODUCTION OPERATIONS</small><h1>Shift turnover</h1><p>Record an update and review the history for any machine.</p></div><span id="today"></span></section>
 <section class="panel"><h2>01 &nbsp; New turnover entry</h2>
 <form id="entry">
-<label>Machine *<select id="machine" required><option value="">Choose a machine...</option></select></label>
+<label>Machine *<select id="machine" required><option value="">Choose a machine...</option><option value="CNC-100">CNC-100</option><option value="CNC-101">CNC-101</option><option value="CNC-102">CNC-102</option><option value="LATHE-201">LATHE-201</option><option value="MILL-305">MILL-305</option></select></label>
 <div class="grid"><label>Operator *<input id="operator" required placeholder="Operator name"></label><label>Shop order<input id="shopOrder" placeholder="Shop order"></label><label>Quantity<input id="quantity" type="number" min="0" step="1" placeholder="Quantity"></label><label>Operation<input id="operation" placeholder="Operation number or description"></label></div>
 <label>Comments *<textarea id="comments" rows="4" required maxlength="5000" placeholder="What does the next shift need to know?"></textarea></label>
 <div class="submitrow"><span id="message" role="status"></span><button class="primary">＋ Submit comment</button></div></form></section>
