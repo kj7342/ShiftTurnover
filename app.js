@@ -12,7 +12,26 @@ let selected="";
 const save=()=>localStorage.setItem(KEY,JSON.stringify(data));
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function machines(){const current=$("machine").value; $("machine").innerHTML='<option value="">Choose a machine...</option>'+data.machines.slice().sort().map(m=>'<option value="'+esc(m)+'">'+esc(m)+'</option>').join("");if(data.machines.includes(current))$("machine").value=current;$("machineAdmin").innerHTML=data.machines.slice().sort().map(m=>'<li>'+esc(m)+'<button data-remove="'+esc(m)+'" type="button">Remove</button></li>').join("")||"<li>No machine codes.</li>";}
-function history(){const m=$("machine").value.trim();selected=data.machines.find(x=>x.toLowerCase()===m.toLowerCase())||"";$("subtitle").textContent=selected?"Showing turnover history for "+selected+".":"Select a machine to view its history.";if(!selected){$("list").className="empty";$("list").textContent="Choose a machine above to see its turnover comments.";return}const q=$("filter").value.toLowerCase();let rows=data.comments.filter(x=>x.machine===selected).filter(x=>[x.operator,x.shopOrder,x.operation,x.comments,x.quantity].join(" ").toLowerCase().includes(q)).sort((a,b)=>b.created-a.created);$("list").className="";$("list").innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="itemtop"><strong>'+esc(x.machine)+' · '+esc(x.operator)+'</strong><span>'+new Date(x.created).toLocaleString()+'</span></div><p class="comment">'+esc(x.comments)+'</p><span class="tag">Shop order: '+esc(x.shopOrder||"—")+'</span><span class="tag">Quantity: '+esc(x.quantity||"—")+'</span><span class="tag">Operation: '+esc(x.operation||"—")+'</span></article>').join():'<div class="empty">No matching comments for this machine.</div>'}
+function history(){
+const m=$("machine").value.trim();
+selected=data.machines.find(x=>x.toLowerCase()===m.toLowerCase())||"";
+if(!selected){$("subtitle").textContent="Select a machine to view its history.";$("list").className="empty";$("list").textContent="Choose a machine above to see its turnover comments.";return}
+const q=$("filter").value.trim().toLowerCase();
+const rows=data.comments.filter(x=>x.machine===selected).filter(x=>[x.operator,x.shopOrder,x.operation,x.comments,x.quantity].join(" ").toLowerCase().includes(q)).sort((a,b)=>b.created-a.created);
+$("subtitle").textContent=rows.length+" "+(rows.length===1?"entry":"entries")+" recorded for "+selected+(q?" · filtered results":"");
+if(!rows.length){$("list").className="empty";$("list").innerHTML='<div class="emptyicon">⌕</div><strong>No matching updates</strong><p>Try another search or add a new turnover comment.</p>';return}
+const dateKey=t=>{const d=new Date(t);return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()};
+const dateLabel=t=>{const d=new Date(t),now=new Date(),yesterday=new Date();yesterday.setDate(now.getDate()-1);if(dateKey(t)===dateKey(now.getTime()))return"Today";if(dateKey(t)===dateKey(yesterday.getTime()))return"Yesterday";return d.toLocaleDateString([],{weekday:"long",month:"long",day:"numeric",year:"numeric"})};
+const initials=s=>String(s||"OP").trim().split(/\\s+/).slice(0,2).map(v=>v.charAt(0)).join("").toUpperCase();
+let lastDate="",html="";
+rows.forEach(x=>{
+const key=dateKey(x.created);
+if(key!==lastDate){html+='<div class="date-divider"><span>'+dateLabel(x.created)+'</span></div>';lastDate=key}
+const time=new Date(x.created).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+html+='<article class="log-entry"><div class="log-rail"><span class="log-dot"></span></div><div class="log-card"><div class="log-top"><div class="operator-block"><span class="avatar">'+esc(initials(x.operator))+'</span><div><strong>'+esc(x.operator||"Unknown operator")+'</strong><span class="entry-machine">'+esc(x.machine)+' <i>·</i> Shift update</span></div></div><time>'+time+'</time></div><p class="log-comment">'+esc(x.comments)+'</p><div class="log-meta">'+(x.shopOrder?'<span><small>SHOP ORDER</small><b>'+esc(x.shopOrder)+'</b></span>':'')+(x.quantity?'<span><small>QUANTITY</small><b>'+esc(x.quantity)+'</b></span>':'')+(x.operation?'<span><small>OPERATION</small><b>'+esc(x.operation)+'</b></span>':'')+'</div></div></article>';
+});
+$("list").className="production-log";$("list").innerHTML=html;
+}
 function drawer(open){$("drawer").classList.toggle("open",open);$("backdrop").classList.toggle("hidden",!open)}
 $("entry").addEventListener("submit",e=>{e.preventDefault();const m=data.machines.find(x=>x.toLowerCase()===$("machine").value.trim().toLowerCase());if(!m){$("message").textContent="Select a machine from the machine list.";return}data.comments.push({machine:m,operator:$("operator").value.trim(),shopOrder:$("shopOrder").value.trim(),quantity:$("quantity").value,operation:$("operation").value.trim(),comments:$("comments").value.trim(),created:Date.now()});save();$("entry").reset();$("machine").value=m;$("message").textContent="Saved in this browser.";history()});
 $("machine").addEventListener("change",history);$("filter").addEventListener("input",history);
