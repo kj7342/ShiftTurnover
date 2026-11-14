@@ -4,6 +4,10 @@ const $=id=>document.getElementById(id),KEY="shiftTurnoverDemo_v1",THEME="shiftT
 const sampleMachines=["CNC-100","CNC-101","CNC-102","LATHE-201","MILL-305"];
 const sampleComments=[{machine:"CNC-102",operator:"Jordan Lee",shopOrder:"SO-48291",quantity:"120",operation:"OP 30",comments:"Tool change completed. First-piece inspection passed; machine running normally.",created:Date.now()-7200000},{machine:"CNC-102",operator:"Morgan Davis",shopOrder:"SO-48291",quantity:"85",operation:"OP 30",comments:"Finished the remaining batch. Please verify coolant level before restarting.",created:Date.now()-93600000}];
 let data;try{data=JSON.parse(localStorage.getItem(KEY))||{machines:sampleMachines,comments:sampleComments}}catch{data={machines:sampleMachines,comments:sampleComments}}
+// Recover safely if an older or partially initialized browser save has no machine codes.
+if(!data || typeof data!=="object") data={};
+if(!Array.isArray(data.machines) || data.machines.length===0) data.machines=[...sampleMachines];
+if(!Array.isArray(data.comments)) data.comments=[...sampleComments];
 let selected="";
 const save=()=>localStorage.setItem(KEY,JSON.stringify(data));
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
